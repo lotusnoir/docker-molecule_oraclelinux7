@@ -6,6 +6,7 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN yum -y update; yum -y install systemd; yum clean all
 WORKDIR /lib/systemd/system/sysinit.target.wants/
 RUN (for i in *; do [ "${i}" = "systemd-tmpfiles-setup.service" ] || rm -f "${i}"; done); \
     rm -f /lib/systemd/system/multi-user.target.wants/*;\
@@ -26,4 +27,4 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip \
 RUN wget -q -O /usr/local/bin/goss https://github.com/aelsabbahy/goss/releases/download/v0.4.2/goss-linux-amd64 && chmod +x /usr/local/bin/goss
 
 VOLUME [ "/sys/fs/cgroup" ]
-ENTRYPOINT ["/lib/systemd/systemd"]
+CMD ["/usr/sbin/init"]
